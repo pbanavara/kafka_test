@@ -9,6 +9,7 @@ import argparse
 import json
 
 concurrent = 200
+count = 0
 
 def doWork():
     while True:
@@ -22,6 +23,9 @@ def getStatus(ourl):
         json_obj = '{ "Data": { "site_id": 20, "device_token": "foQy614ogE0:APA91bFsu99k-zuX2T6tRLFxBYzx0eI7mXbvGFu6I1DVLBCofZzxUnx0nCf56eZLv77jHyNwVpU8vgzHHzahXTdleMfpVwrTHvLvPpM7aLI-Z9xse7er0497_iRvlslLTziWvChdwXVo", "campaign_name": "test-campaign-5", "event_name": "add-to-cart", "title": { "variable1": "test-campaign-5", "variable2": "Good Title again" }, "message": { "variable1": "test-campaign-5", "variable2": "Good message again" }, "notification_url": { "variable1": "harishhub" }, "notification_image": "" }, "PartitionKey":"myabcderg"}'
         r = requests.put(ourl, json=json.loads(json_obj))
         res = r.status_code 
+        if res == 200:
+            global count
+            count +=1
         text = r.text
         return res, text
     except:
@@ -49,5 +53,6 @@ if __name__ == "__main__":
         for url in urls:
             q.put(url.strip())
         q.join()
+        print("200 response code count :: {}".format(count))
     except KeyboardInterrupt:
         sys.exit(1)
